@@ -3,15 +3,16 @@ var app = builder.Build();
 
 app.Run(async (context) =>
 {
-    context.Response.ContentType = "text/html; charset=utf-8";
-    var stringBuilder = new System.Text.StringBuilder("<table>");
+    var path = context.Request.Path;
+    var now = DateTime.Now;
+    var response = context.Response;
 
-    foreach (var header in context.Request.Headers)
-    {
-        stringBuilder.Append($"<tr><td>{header.Key}</td><td>{header.Value}</td></tr>");
-    }
-    stringBuilder.Append("</table>");
-    await context.Response.WriteAsync(stringBuilder.ToString());
+    if (path == "/date")
+        await response.WriteAsync($"Date: {now.ToShortDateString()}");
+    else if (path == "/time")
+        await response.WriteAsync($"Time: {now.ToShortTimeString()}");
+    else
+        await response.WriteAsync("Hello METANIT.COM");
 });
 
 app.Run();
